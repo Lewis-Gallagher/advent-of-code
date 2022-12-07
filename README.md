@@ -9,10 +9,10 @@ Here's a snippet from the about page:
 
 Each day's challenge has two problems, each worth one ⭐. A simple example for each problem is provided with a small data input. Following this, each user receives a unique dataset for their problem, for which they use to calculate their unique solution to the day's challenge.
 
-I tried a few of these problems in 2021, and found them to be great fun! Going forwards from 2022 I thought it'd be a nice idea to catalogue my solutions on GitHub, so I could keep a record of them and share them with friends etc.
+## Why am I doing this?
+I hope to use these puzzles as an opportunity to learn and become accustomed to new libraries, techniques, datastructures and ways of critical thinking. I started this in 2019 and I hope to be able to progress further each year.
 
 ## How does it work?
-
 Navigate through the directories in this repo to find my solutions for each of the challenges. Here you'll find the problem outline, as well as the solutions for both the examples given in the problem description, and the generated datafile for my user.
 
 I typically solve most of these problems with Python, and to save myself some time (_and scratch that organisational itch_) I've setup a cookiecutter to nicely format my solutions.
