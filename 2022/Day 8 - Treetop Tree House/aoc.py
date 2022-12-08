@@ -26,41 +26,35 @@ def _parse_input(data: str) -> List[int]:
     return data
 
 
+def is_visible(i: int, j: int, data: List[int]) -> bool:
+    """Takes (x,y) coordinates as input and checks if the tree at that location is visible from the left, right, top or bottom respectively."""
+
+    if data[i][j] > max(data[i][:j]) or \
+        data[i][j] > max(data[i][j+1:]) or \
+        data[i][j] > max([row[j] for row in data[:i]]) or \
+        data[i][j] > max([row[j] for row in data[i+1:]]):
+        return True
+
+
 def part_1_solution(data: List[str]) -> int:
     """Compute solution to puzzle part 1."""
-    
-    def is_visible(tree: int, data: List[int]) -> bool:
-        """Check if the tree is visible from the right, left, top or bottom respectively."""
-        if tree > max(data[i+1][0:j+1]) or \
-            tree > max(data[i+1][j+2:]) or \
-            tree > max([row[j+1] for row in data[:i+1]]) or \
-            tree > max([row[j+1] for row in data[i+2:]]):
-            return True
     
     # All tree edges are visible. Get sum of shape.
     visible = len(data) * 2 + len(data[0]) * 2 - 4
 
-    # Get inner trees only.
-    data_inner = [row[1:-1] for row in data[1:-1]]
-
-    for i in range(len(data_inner)):
-        for j in range(len(data_inner[i])):
-            if is_visible(data_inner[i][j], data):
+    # Iterate through rows and columns.
+    for i in range(1, len(data)-1):
+        for j in range(1, len(data[i])-1):
+            if is_visible(i, j, data):
                 visible += 1
 
     return visible
 
 
-# def part_2_solution(data: List[str]) -> int:
-#     """Compute solution to puzzle part 2."""
+def part_2_solution(data: List[str]) -> int:
+    """Compute solution to puzzle part 2."""
 
-#     for i in range(len(data)):
-#         for j in range(len(data[i])):
-#             if is_visible(data[i][j]):
-                
-
-
-#     return scenic_score
+    return 0
 
 
 if __name__ == "__main__":
