@@ -6,9 +6,6 @@ Solution for Advent of Code 2022 day 9 - https://adventofcode.com/2022/day/9
 import os
 from typing import List, Any
 import timeit
-import numpy as np
-from itertools import groupby
-from operator import itemgetter
 
 
 EXAMPLE_INPUT = '''\
@@ -33,26 +30,50 @@ def _parse_input(data: str) -> List[tuple]:
     return data
 
 
-def adjacent(a: List[int], b: List[int]) -> bool:
-    """Returns true of a and b are adjacent"""
-    # Vertically adjacent
-    if a[0] == b[0] and abs(a[1] - b[1]) == 1:
+def are_adjacent(head: List[int], tail: List[int]) -> None:
+    """Returns true if head xy position is adjacent to tail xy position"""
+
+    xdist = abs(head[0] - tail[0])
+    ydist = abs(head[1] - tail[1])
+    if (xdist == 0 or xdist == 1) and (ydist == 1 or ydist == 0):
         return True
 
-    # Horizontally adjacent
-    elif a[1] == b[1] and abs(a[0] - b[0]) == 1:
-        return True
 
-    # Diagonally adjacent (Thanks Niki!)
-    elif abs(a[0] - b[0]) == 1 and abs(a[1] - b[1]) == 1:
-        return True
+def move_head(move: int, head: int) -> List[int]:
+    """Updates head position by 1 depending on direction."""
 
-    # A and B in the same position
-    elif abs(a[0] - b[0]) == 0 and abs(a[1] - b[1]) == 0:
-        return True
+    if move == 'R':
+        head[0] += 1
+    elif move == 'L':
+        head[0] -= 1
+    elif move == 'U':
+        head[1] += 1
+    elif move == 'D':
+        head[1] -= 1
 
-    else:
-        return False 
+    return head
+
+
+def move_tail(move: str, head: int, tail: int) -> List[int]:
+    """Updates tail position relative to head position."""
+
+    if move == 'U':
+        tail[0] += head[0] - tail[0]
+        tail[1] += head[1] - tail[1] -1
+
+    elif move == 'D':
+        tail[0] += head[0] - tail[0]
+        tail[1] += head[1] - tail[1] +1
+
+    elif move == 'R':
+        tail[0] += head[0] - tail[0] -1
+        tail[1] += head[1] - tail[1]
+
+    elif move == 'L':
+        tail[0] += head[0] - tail[0] +1
+        tail[1] += head[1] - tail[1]
+
+    return tail
 
 
 def part_1_solution(data: List[str]) -> Any:
@@ -61,68 +82,21 @@ def part_1_solution(data: List[str]) -> Any:
     head = [0,0]
     tail = [0,0]
     visited = []
-    for m, n in data:
-        if m == "R":
-            # Move head one space at a time
-            for _ in range(int(n)):
-                head[0] += 1
-                # If head not touching tail - otherwise tail stays still
-                if not adjacent(head, tail):
-                    # If head is on a different y value
-                    if head[1] != tail[1]:
-                        # Move tail x to head pos minus 1 (when going right) and align y (diagonal move)
-                        tail[0] = head[0] - 1
-                        tail[1] = head[1]
-                    # On same y, move tail to one behind head on x
-                    else:
-                        tail[0] = head[0] - 1
-                visited.append(list(tail))
 
-        elif m == "L":
-            for _ in range(int(n)):
-                head[0] -= 1
-                # If head not touching tail - otherwise tail stays still
-                if not adjacent(head, tail):
-                    # If head is on a different y value
-                    if head[1] != tail[1]:
-                        # Move tail x to head pos minus 1 (when going right) and align y (diagonal move)
-                        tail[0] = head[0] + 1
-                        tail[1] = head[1]
-                    # On same y, move tail to one behind head on x
-                    else:
-                        tail[0] = head[0] + 1
-                visited.append(list(tail))
+    # Iterate over moves.
+    for move, count in data:
+        # Move head one count at a time.
+        for _ in range(int(count)):
+            head = move_head(move, head)
+            
+            # Check if tail is still adjacent.
+            if not are_adjacent(head, tail):
+                tail = move_tail(move, head, tail)
 
-        elif m == "U":
-            for _ in range(int(n)):
-                head[1] += 1
-                # If head not touching tail - otherwise tail stays still
-                if not adjacent(head, tail):
-                    # If head is on a different y value
-                    if head[1] != tail[1]:
-                        # Move tail x to head pos minus 1 (when going right) and align y (diagonal move)
-                        tail[1] = head[1] - 1
-                        tail[0] = head[0]
-                    # On same y, move tail to one behind head on x
-                    else:
-                        tail[1] = head[1] - 1
-                visited.append(list(tail))
-
-        elif m == "D":
-            for _ in range(int(n)):
-                head[1] -= 1
-                # If head not touching tail - otherwise tail stays still
-                if not adjacent(head, tail):
-                    # If head is on a different y value
-                    if head[1] != tail[1]:
-                        # Move tail x to head pos minus 1 (when going right) and align y (diagonal move)
-                        tail[1] = head[1] + 1
-                        tail[0] = head[0]
-                    # On same y, move tail to one behind head on x
-                    else:
-                        tail[1] = head[1] + 1
-                visited.append(list(tail))
-
+            # Append tail coordinates to list of visited coordinates.
+            visited.append(list(tail))
+            
+    # Return the length of a Set of coordinates to get unique values.
     return len(set(tuple(coord) for coord in visited))
 
 
@@ -134,6 +108,7 @@ def part_2_solution(data: List[str]) -> Any:
 if __name__ == "__main__":
     # Compute puzzle with example data
     example_data = _parse_input(EXAMPLE_INPUT)
+    
     # Assert the example input results are as expected.
     assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
     # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
@@ -142,7 +117,7 @@ if __name__ == "__main__":
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
         data = _parse_input(f.read())
 
-    # # Print answers
+    # Print answers
     print(f'Part 1: { part_1_solution(data=data) }')
     # print(f'Part 2: { part_2_solution(data=data) }')
     print(timeit.timeit())
