@@ -2,12 +2,14 @@
 Solution for Advent of Code 2022 day 9 - https://adventofcode.com/2022/day/9
 """
 
+
 import os
 from typing import List, Any
 import timeit
 import numpy as np
 from itertools import groupby
 from operator import itemgetter
+
 
 EXAMPLE_INPUT = '''\
 R 4
@@ -19,22 +21,9 @@ D 1
 L 5
 R 2'''
 
+
 EXAMPLE_OUTPUT_PART1 = 13
 EXAMPLE_OUTPUT_PART2 = 0
-
-
-def build_matrix(data: List[tuple]) -> List[List[int]]:
-    """Build an empty matrix based on the maximum x and y axis values."""
-    x, y = [], []
-    for i in data:
-        if i[0] == 'D' or i[0] == 'U':
-            x.append(int(i[1]))
-        if i[0] == 'R' or i[0] == 'L':
-            y.append(int(i[1]))
-
-    mat = np.zeros((max(x)+1, max(y)+1))
-
-    return mat
 
 
 def _parse_input(data: str) -> List[tuple]:
@@ -68,14 +57,6 @@ def adjacent(a: List[int], b: List[int]) -> bool:
 
 def part_1_solution(data: List[str]) -> Any:
     """Compute solution to puzzle part 1."""
-
-    mat = build_matrix(data)
-
-    # Start at bottom left
-    # hpos = (len(mat)-1, 0)
-    # tpos = hpos
-    # mat[tpos] += 1
-    # print(tpos, hpos)
     
     head = [0,0]
     tail = [0,0]
@@ -111,7 +92,6 @@ def part_1_solution(data: List[str]) -> Any:
                     else:
                         tail[0] = head[0] + 1
                 visited.append(list(tail))
-
 
         elif m == "U":
             for _ in range(int(n)):
