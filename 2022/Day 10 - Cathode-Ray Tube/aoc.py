@@ -155,15 +155,14 @@ noop
 noop
 noop'''
 
+
 EXAMPLE_OUTPUT_PART1 = 13140
-EXAMPLE_OUTPUT_PART2 = 0
 
 
 def _parse_input(data: str) -> List[str]:
     """Parse input text file into usable data structure."""
 
     return [i.split() for i in data.splitlines()]
-
 
 
 def part_1_solution(data: List[str]) -> Any:
@@ -173,41 +172,55 @@ def part_1_solution(data: List[str]) -> Any:
     X = 1
     signals = []
 
-    # Loop over each action and append the X value at the end of each action
-    for action in data:
-        
-        # addx takes 2 cycles (range(2)) and updates X at the end of these cycels.
+    for action in data:        
+        # addx takes 2 cycles (range(2)) and updates X at the end.
         if action[0] == 'addx':
             for _ in range(2):
                 signals.append(X)
             X += int(action[1])
 
+        # noop takes 1 cycle and doesn't alter X so append X as is.
         elif action[0] == 'noop':
-            # noop takes 1 cycle and doesn't alter X so append X as is.
             signals.append(X)
-
-    return sum([signals[i-1] * i for i in range(20,len(signals), 40)])
+        
+    # Return i-1 because cycles begin at 1.
+    return signals, sum([signals[i-1] * i for i in range(20,len(signals), 40)])
 
 
 def part_2_solution(data: List[str]) -> Any:
     """Compute solution to puzzle part 2."""
-    return 0
+
+    # Get list of signals from part 1.
+    sprite_locs = part_1_solution(data)[0]
+    # Split signas into list of lists equal to size of screen.
+    sprite_locs = [sprite_locs[i:i + 40] for i in range(0, len(sprite_locs), 40)]
+    # Make empty screen filled with '.'.
+    screen = [[ '.' for _ in range(40)] for j in range(6)]
+
+    for i in range(len(sprite_locs)):
+        for j in range(len(sprite_locs[i])):
+            # Make sprite range
+            sprite_pos = [sprite_locs[i][j]-1, sprite_locs[i][j], sprite_locs[i][j]+1]
+
+            # If the pixel being drawn by the screen is within the sprite range then fill pixel.
+            if j in sprite_pos:
+                screen[i][j] = '#'
+
+    return screen
 
 
 if __name__ == "__main__":
     # Compute puzzle with example data
     example_data = _parse_input(EXAMPLE_INPUT)
-    print(example_data)
+
     # Assert the example input results are as expected.
-    print(part_1_solution(example_data))
-    assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
-    # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
+    assert part_1_solution(example_data)[1] == EXAMPLE_OUTPUT_PART1
 
     # Read puzzle input.
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
         data = _parse_input(f.read())
 
     # # Print answers
-    print(f'Part 1: { part_1_solution(data=data) }')
-    # print(f'Part 2: { part_2_solution(data=data) }')
+    print(f'Part 1: { part_1_solution(data=data)[1] }')
+    print(f'Part 2: { part_2_solution(data=data) }')
     print(timeit.timeit())
