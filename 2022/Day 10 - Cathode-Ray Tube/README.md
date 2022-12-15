@@ -305,6 +305,7 @@ Sprite position: ...................###..................
 #######.......#######.......#######.....
 </code></pre>
 <p>Render the image given by your program. <em>What eight capital letters appear on your CRT?</em>
+
 # Run
 To complete this problem, run:
 ```
