@@ -9,7 +9,7 @@ import timeit
 from collections import deque
 from dataclasses import dataclass
 import re
-from math import trunc, prod
+from math import prod
 
 
 EXAMPLE_INPUT = '''\
@@ -112,22 +112,22 @@ def compute_operation(operation: List[str], item: int, part_2: bool) -> int:
 
     try:
         if operation[0] == '*' and operation[1] == 'old':
-             new_item_val =  trunc(int(item**2))
+             new_item_val =  int(item**2)
 
         elif operation[0] == '*' and operation[1].isnumeric():
-            new_item_val = trunc(int(item * int(operation[1])))
+            new_item_val = int(item * int(operation[1]))
 
         elif operation[0] == '+' and operation[1] == 'old':
-            new_item_val = trunc(int(item + item))
+            new_item_val = int(item + item)
 
         elif operation[0] == '+' and operation[1].isnumeric():
-            new_item_val = trunc(int(item + int(operation[1])))
+            new_item_val = int(item + int(operation[1]))
 
     except ValueError:
         print('Operation could not be completed.')
 
     if part_2 == False:
-        return new_item_val / 3
+        return new_item_val // 3
     else:
         return new_item_val
 
@@ -178,8 +178,8 @@ if __name__ == "__main__":
     # Assert the example input results are as expected.
     # assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
     # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
-    # print(part_1_solution(example_data))
-    print(part_2_solution(example_data))
+    print(part_1_solution(example_data))
+    # print(part_2_solution(example_data))
 
 
     # Read puzzle input.
