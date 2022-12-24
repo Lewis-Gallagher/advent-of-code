@@ -1,6 +1,6 @@
 """
 Solution for Advent of Code 2022 day 11 - https://adventofcode.com/2022/day/11
-Lewis Gallagher - lewis.gallagher@icr.ac.uk
+Author - Lewis Gallagher
 """
 
 from __future__ import annotations
@@ -9,8 +9,8 @@ from typing import List, Dict
 import time
 from collections import deque
 import re
-from math import prod
-
+import math
+from copy import deepcopy
 
 
 EXAMPLE_INPUT = '''\
@@ -43,7 +43,8 @@ Monkey 3:
     If false: throw to monkey 1'''
 
 EXAMPLE_OUTPUT_PART1 = 10605
-EXAMPLE_OUTPUT_PART2 = 0
+EXAMPLE_OUTPUT_PART2 = 2713310158
+
 
 class Monkey:
     """
@@ -64,7 +65,7 @@ class Monkey:
         return f"Monkey:(id={self.monkey_num}, items={self.current_items}, inspect_count={self.inspected_count})"
 
 
-    def inspect_item(self) -> int:
+    def inspect_item(self, releif=True, lcm=None) -> int:
         """Inspects the next item in a Monkey's item list. 
         Inspecting causes our worry level to go up, before it is divided by three and rounded down. 
         Then we test who to throw to, by dividing by a divisor."""
@@ -91,8 +92,13 @@ class Monkey:
         except ValueError:
             print('Operation could not be completed.')
 
-        # Reduce our worry level and increment inspected counter.
-        self.current_items[0] = self.current_items[0] // 3
+        # Reduce our worry level using releif or lcm.
+        if releif:
+            self.current_items[0] = self.current_items[0] // 3
+        if lcm:
+            self.current_items[0] %= lcm
+
+        # Increment inspected counter.
         self.inspected_count += 1
  
         # Return an int representing which monkey to throw to.
@@ -111,6 +117,10 @@ class Monkey:
         """Adds current item to the item list of a monkey while removing from the list of the current monkey."""
         other.add_item(self.current_items.popleft())        
 
+
+def get_lcm(monkey_dict: Dict[int, Monkey]):
+    """Copmutes lowest common multiple of all divisors. Because all divisors are prime numbers this equals the product of them all."""
+    return math.lcm(*[monkey.divisor for monkey in monkey_dict.values()])
 
 
 def _parse_input(data: str) -> List[str]:
@@ -163,13 +173,23 @@ def part_1_solution(monkey_dict: Dict[int, Monkey]) -> int:
                 monkey.give_item(to_monkey) # Throw to the chosen monkey.
 
     # Return monkey business. i.e. the total of two highest inspection_counts multiplied together.
-    return prod(sorted(monkey.inspected_count for monkey in monkey_dict.values())[-2:])
+    return math.prod(sorted(monkey.inspected_count for monkey in monkey_dict.values())[-2:])
 
 
-def part_2_solution(data: List[str]) -> Any:
+def part_2_solution(monkey_dict: Dict[int, Monkey]) -> int:
     """Compute solution to puzzle part 2."""
 
-    return 0
+    # 10000 rounds of play.
+    rounds_to_play = 10000
+    
+    for _ in range(1, rounds_to_play+1):
+        for monkey in monkey_dict.values(): # Iterator through monkeys in order.
+            while monkey.current_items: # Monkey inspects and throws until it has no more items.
+                to_monkey = list(monkey_dict.values())[monkey.inspect_item(releif=False, lcm=get_lcm(monkey_dict))] # Find which monkey to throw to using lcm mod.
+                monkey.give_item(to_monkey) # Throw to the chosen monkey.
+
+    # Return monkey business. i.e. the total of two highest inspection_counts multiplied together.
+    return math.prod(sorted(monkey.inspected_count for monkey in monkey_dict.values())[-2:])
 
 
 if __name__ == "__main__":
@@ -177,8 +197,8 @@ if __name__ == "__main__":
     example_data = _parse_input(EXAMPLE_INPUT)
 
     # Assert the example input results are as expected.
-    assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
-    # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
+    assert part_1_solution(deepcopy(example_data)) == EXAMPLE_OUTPUT_PART1
+    assert part_2_solution(deepcopy(example_data)) == EXAMPLE_OUTPUT_PART2
 
     # Read puzzle input.
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
@@ -186,11 +206,11 @@ if __name__ == "__main__":
 
     # Print answers.
     start_time_1 = time.time()
-    print(f'Part 1: { part_1_solution(data) }')
+    print(f'Part 1: { part_1_solution(deepcopy(data)) }')
     execution_time_1 = (time.time() - start_time_1)
     print('Part 1 execution time: ' + str(execution_time_1))
 
-    # start_time_2 = time.time()
-    # print(f'Part 2: { part_2_solution(data) }')
-    # execution_time_2 = (time.time() - start_time_2)
-    # print('Part 2 execution time: ' + str(execution_time_2))
+    start_time_2 = time.time()
+    print(f'Part 2: { part_2_solution(deepcopy(data)) }')
+    execution_time_2 = (time.time() - start_time_2)
+    print('Part 2 execution time: ' + str(execution_time_2))
