@@ -17,11 +17,11 @@ Navigate through the directories in this repo to find my solutions for each of t
 
 I typically solve most of these problems with Python, and to save myself some time (_and scratch that organisational itch_) I've setup a cookiecutter to nicely format my solutions.
 
-To generate a solution skeleton for a new challenge, simply run the below command, complete the cookiecutter questionnaire.
+To generate a solution skeleton for a new challenge, simply run the below command and complete the cookiecutter questionnaire.
 
 ```bash
 pip install cookiecutter
-cookiecutter -f .
+cookiecutter -f https://github.com/Lewis-Gallagher/advent-of-code-cookiecutter
 ```
 
 Instructions on how to execute the solutions will be detailed in the associated README for the problem, but generally you can just execute the Python files as normal.
