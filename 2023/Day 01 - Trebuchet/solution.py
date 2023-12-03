@@ -91,7 +91,6 @@ def part_2_solution(data: List[str]) -> int:
         i_found = False
         j_found = False
 
-
         while not i_found and i < len(line):
             for k,v in digit_dict.items():
                 if line[i:].startswith(k) or line[i:].startswith(str(v)):
@@ -105,7 +104,6 @@ def part_2_solution(data: List[str]) -> int:
                     nums.append(v)
                     j_found = True
             j-=1
-
 
         s = int(''.join([str(i) for i in nums]))
         sums.append(s)
