@@ -14,7 +14,7 @@ Distance:  9  40  200
 '''
 
 EXAMPLE_OUTPUT_PART1 = 288
-EXAMPLE_OUTPUT_PART2 = 0
+EXAMPLE_OUTPUT_PART2 = 71503
 
 
 def _parse_input1(data: str) -> List[str]:
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     # Assert the example input results are as expected.
     assert part_1_solution(example_data1) == EXAMPLE_OUTPUT_PART1
-    assert part_2_solution(example_data2) 
+    assert part_2_solution(example_data2) == EXAMPLE_OUTPUT_PART2
 
     # Read puzzle input for part1.
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
