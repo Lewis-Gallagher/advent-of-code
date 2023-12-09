@@ -15,7 +15,7 @@ EXAMPLE_INPUT = '''\
 '''
 
 EXAMPLE_OUTPUT_PART1 = 114
-EXAMPLE_OUTPUT_PART2 = 0
+EXAMPLE_OUTPUT_PART2 = 2
 
 
 def _parse_input(data: str) -> List[str]:
@@ -86,8 +86,7 @@ if __name__ == "__main__":
 
     # # Assert the example input results are as expected.
     assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
-    print(part_1_solution(example_data))
-    # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
+    assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
 
     # Read puzzle input.
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
