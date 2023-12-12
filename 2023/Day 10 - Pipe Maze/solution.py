@@ -66,7 +66,6 @@ def floodfill(grid: List[List[str]], i:int, j:int) -> int:
     return steps//2
 
 
-
 def part_1_solution(data: List[List[str]]) -> None:
     """Compute solution to puzzle part 1."""
 
@@ -93,18 +92,18 @@ if __name__ == "__main__":
     print(part_1_solution(example_data))
 
     # # Assert the example input results are as expected.
-    # assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
+    assert part_1_solution(example_data) == EXAMPLE_OUTPUT_PART1
     # assert part_2_solution(example_data) == EXAMPLE_OUTPUT_PART2
 
     # Read puzzle input.
-    # with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
-    #     data = _parse_input(f.read())
+    with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
+        data = _parse_input(f.read())
 
-    # # Print answers
-    # start_time_1 = time.time()
-    # print(f'\nPart 1: { part_1_solution(data) }')
-    # execution_time_1 = (time.time() - start_time_1)
-    # print(f'Part 1 execution time: {execution_time_1:.4f}')
+    # Print answers
+    start_time_1 = time.time()
+    print(f'\nPart 1: { part_1_solution(data) }')
+    execution_time_1 = (time.time() - start_time_1)
+    print(f'Part 1 execution time: {execution_time_1:.4f}')
 
     # start_time_2 = time.time()
     # print(f'\nPart 2: { part_2_solution(data) }')
