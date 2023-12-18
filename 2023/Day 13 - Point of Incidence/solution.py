@@ -27,6 +27,7 @@ EXAMPLE_INPUT = '''\
 #....#..#
 '''
 
+
 EXAMPLE_OUTPUT_PART1 = 405
 EXAMPLE_OUTPUT_PART2 = 400
 
@@ -36,7 +37,11 @@ def _parse_input(data: str) -> List[str]:
 
     return np.array([[i for i in line.split()] for line in data.split('\n\n')], dtype='object')
 
-def find_mirror(grid):
+
+def find_mirror(grid: List[str]) -> int:
+    """
+    Takes a list of strings and finds the reflection point. Returns the number of rows above the reflection point.
+    """
 
     nrow = len(grid)
     for n, (a, b) in enumerate(zip(grid, grid[1:])):
@@ -59,7 +64,11 @@ def find_mirror(grid):
     return 0
 
 
-def mismatches(a, b):
+def mismatches(a: str, b: str) -> int:
+    """
+    Takes two strings and returns the number of mismatches between them.
+    """
+
     t = 0
     for i, j in zip(a, b):
         if i != j:
@@ -67,7 +76,10 @@ def mismatches(a, b):
     return t
 
 
-def find_mirror_2(grid):
+def find_mirror_2(grid: List[str]) -> int:
+    """
+    Takes a list of strings and finds the reflection point. There must be exactly 1 smudge in the grid.
+    """
 
     nrow = len(grid)
     for n, (a, b) in enumerate(zip(grid, grid[1:])):
@@ -82,7 +94,7 @@ def find_mirror_2(grid):
                 smudges += mismatches(grid[n-i], grid[m+i])
                 if smudges <= 1:
                     continue
-                
+
             # If we don't break the loop (all rows match and must have 1 smudge), return.
             else:
                 if smudges == 1:
@@ -90,10 +102,11 @@ def find_mirror_2(grid):
                     
     return 0
 
+
 def part_1_solution(data: List[str]) -> Any:
     """Compute solution to puzzle part 2."""
 
-    # Add up the number of columns to the left of each vertical line of reflection; to that, also add 100 multiplied by the number of rows above each horizontal line of reflection.
+    # Finds the reflection point in the grid. Also transpose the grid to find reflecting columns.
     total = 0
 
     for grid in data:
@@ -108,7 +121,7 @@ def part_1_solution(data: List[str]) -> Any:
 def part_2_solution(data: List[str]) -> Any:
     """Compute solution to puzzle part 2."""
 
-    # Add up the number of columns to the left of each vertical line of reflection; to that, also add 100 multiplied by the number of rows above each horizontal line of reflection.
+    # Finds the reflection point in the grid. Also transpose the grid to find reflecting columns.
     total = 0
 
     for grid in data:
