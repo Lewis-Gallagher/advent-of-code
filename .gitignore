@@ -1,0 +1,4 @@
+.cc.sh
+.DS_Store
+*.ipynb
+venv/
