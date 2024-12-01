@@ -34,7 +34,6 @@ def _parse_input(data: str) -> List[int]:
 def part_1_solution(list_1: List[int], list_2: List[int]) -> int:
     """Compute solution to puzzle part 1."""
 
-    # lambda function calculates difference between items in two sorted lists
     return sum([abs(i-j) for i,j in zip(sorted(list_1), sorted(list_2))])
 
 
