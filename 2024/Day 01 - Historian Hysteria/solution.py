@@ -55,7 +55,6 @@ if __name__ == "__main__":
     # Read puzzle input.
     with open(os.path.join(os.path.dirname(__file__), "input.txt"), "r", encoding="utf-8") as f:
         x,y = _parse_input(f.read())
-        print(x,y)
 
     # Print answers
     start_time_1 = time.time()
