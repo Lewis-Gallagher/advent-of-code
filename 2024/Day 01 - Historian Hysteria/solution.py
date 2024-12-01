@@ -35,7 +35,7 @@ def part_1_solution(list_1: List[int], list_2: List[int]) -> int:
     """Compute solution to puzzle part 1."""
 
     # lambda function calculates difference between items in two sorted lists
-    return sum([(lambda x,y: abs(x-y)) (i,j) for i,j in zip(sorted(list_1), sorted(list_2))])
+    return sum([abs(i-j) for i,j in zip(sorted(list_1), sorted(list_2))])
 
 
 def part_2_solution(list_1: List[int], list_2: List[int]) -> int:
