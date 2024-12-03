@@ -49,7 +49,7 @@ def part_2_solution(data: str) -> int:
         elif match == "don't()":
             do = False
         elif do:
-            x, y = list(map(int, match[4:-1].split(',')))
+            x, y = list(map(int, re.search(r"(\d{1,3}),(\d{1,3})", match).groups()))
             total += x * y
 
     return total
