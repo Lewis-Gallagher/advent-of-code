@@ -63,7 +63,6 @@ def part_2_solution(data: List[str]) -> int:
     """Compute solution to puzzle part 2."""
 
     cross_counter = 0
-    directions = [(-1, -1), (1, 1), (-1, 1), (1, -1)]
 
     # X should start 1 row and column inside the matrix to be in bounds
     for row in range(1, len(data)-1):
@@ -72,12 +71,13 @@ def part_2_solution(data: List[str]) -> int:
             # Look for A at the center of the X
             if data[row][col] == 'A':
 
-                # Check both diagonals
-                diag1 = [data[row + row_move][col + col_move] for row_move, col_move in directions[:2]]
-                diag2 = [data[row + row_move][col + col_move] for row_move, col_move in directions[2:]]
+                # Compute both diagonals
+                diag1 = [data[row + row_move][col + col_move] for row_move, col_move in [(-1,-1), (0,0), (1,1)]]
+                diag2 = [data[row + row_move][col + col_move] for row_move, col_move in [(-1,1), (0,0), (1,-1)]]
 
-                # Diagonals must be S->M or M->S. Sort lists to ignore orientation
-                if sorted(diag1) == ['M','S'] and sorted(diag2) == ['M', 'S']:
+                # Check they're SAM or MAS.
+                if (''.join(diag1) == 'SAM' or ''.join(diag1) == 'MAS') and \
+                   (''.join(diag2) == 'SAM' or ''.join(diag2) == 'MAS'):
                     cross_counter+=1
 
     return cross_counter
