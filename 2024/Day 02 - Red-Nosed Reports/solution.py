@@ -65,7 +65,6 @@ def part_2_solution(data: List[str]) -> Any:
         else:
             if fix_record(record):
                 safe_counter += 1
-                continue
 
     return safe_counter
 
