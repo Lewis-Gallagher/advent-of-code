@@ -65,8 +65,7 @@ func main() {
 		moveStr := line[1:]
 		move, err := strconv.Atoi(moveStr)
 		if err != nil {
-			fmt.Printf("Error converting distance '%s' to int: %v. Skipping line.\n", moveStr, err)
-			continue
+			panic(fmt.Sprintf("Couldn't convert '%s' to integer on line %d. Error: %v", moveStr, i+1, err))
 		}
 
 		// make negative if moving left
